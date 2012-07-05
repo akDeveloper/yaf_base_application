@@ -17,6 +17,7 @@ Yaf framework documentation can be found at [php.net](http://www.php.net/manual/
 * If you have PHP 5.4 you can use the internal web server to test the project.
  * `cd yaf_base_application/public`
  * `php -S localhost:8000`
+* This project uses PHP 5.3 namespaces so `yaf.use_namespace` should be turned on.
  
 ## Additions
 
