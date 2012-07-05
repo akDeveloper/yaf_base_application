@@ -135,6 +135,11 @@ class Layout implements Yaf\View_Interface
             $this->tpl_dir = $path;
             $this->engine()->setScriptPath($path);
 
+            // Overwirte layouts path by setting it where views path is.
+            // This will force layout in modules to be placed in 
+            // modules/views/layouts directory
+            $this->layout_path = $path . "/layouts";
+
             return true;
         }
 
