@@ -1,0 +1,4 @@
+log/*
+tests/*
+config/application.ini
+public/favicon.ico

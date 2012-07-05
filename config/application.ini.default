@@ -1,0 +1,31 @@
+[yaf]
+;APP_PATH is the constant defined in index.php
+application.directory=APP_PATH "/app"
+application.ext="php"
+application.view.ext="phtml"
+application.modules="Index"
+application.library=APP_PATH "/lib"
+application.library.directory=APP_PATH "/lib"
+application.library.namespace=""	
+application.bootstrap=APP_PATH "/app" "/Bootstrap.php"
+application.baseUri=""
+application.dispatcher.defaultRoute=""
+application.dispatcher.throwException=1
+application.dispatcher.catchException=1
+application.dispatcher.defaultModule="index"
+application.dispatcher.defaultController="index"
+application.dispatcher.defaultAction="index"
+;custom settings
+application.layout.directory=APP_PATH "/app" "/views" "/layouts"
+application.protect_from_csrf=1
+application.encoding=UTF-8
+;product section inherit from yaf section
+[product:yaf]
+; user configuartions list here
+database.mysql.host=localhost
+database.mysql.port=3306
+database.mysql.user=
+database.mysql.password=
+database.mysql.database=
+database.mysql.charset=utf8
+
