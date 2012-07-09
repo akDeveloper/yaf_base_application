@@ -121,7 +121,7 @@ class Query
     public function __call($name, $args)
     {
         if (in_array(strtoupper($name), $this->_AGGREGATE)) {
-            return $this->aggregate($name, $args[0], $args[1]);
+            return $this->aggregate($name, $args[0], isset($args[1]) ? $args[1] : null);
         }
         throw new \Exception("Invalid method ".get_class($this)."::$name");
     }
@@ -325,7 +325,7 @@ class Query
     protected function build_select()
     {
         if ( null === $this->select ) {
-            return "*";
+            return;
         }
         $args = $this->select;
         
@@ -343,15 +343,17 @@ class Query
         if ( !empty($this->join_conditions) ) $this->select("`{$model::$table}`.*");
         
         $query = "SELECT {$this->build_select()}";
-
+        
         // aggregates
         if (!empty($this->aggregate)) {
             foreach ($this->aggregate as $a) {
-                $query .= ", "
+                $query .= (null === $this->select ? null : ", ")
                     .$a['function']
                     ."({$a['field']})"
                     .(isset($a['as']) ? ' as '.$a['as'] : null);
             }
+        } else {
+            $query .= '*';
         }
 
         $query .= " FROM {$this->getTable()}";
