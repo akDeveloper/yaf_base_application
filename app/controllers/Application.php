@@ -54,8 +54,11 @@ class ApplicationController extends Yaf\Controller_Abstract
         // Assign session to views too.
         $this->getView()->session = $this->session;
 
-        // Assign appication config file
+        // Assign application config file to this controller
         $this->_config = Yaf\Application::app()->getConfig();
+
+        // Assign config file to views
+        $this->getView()->config = $this->_config;
     }
 
     /**
