@@ -12,7 +12,7 @@
  *
  * Notice that controller name is defined as `Posts`, plural, and model is 
  * defind as `Post` singular. RestfullController uses Inflect class to 
- * determinate the name of the Model to load {@link _get_model_name()}
+ * determinate the name of the Model to load {@link get_model_name()}
  *
  */
 abstract class RestfullController extends ApplicationController
@@ -20,6 +20,8 @@ abstract class RestfullController extends ApplicationController
     private $_resource;
 
     private $_resource_collection;
+
+    private $_index_url;
     
     /**
      * Loads and displays all items from a resource collection.
@@ -36,8 +38,9 @@ abstract class RestfullController extends ApplicationController
      * Loads and displays a single resource asccording to Request::getParams() 
      * values. 
      *
-     * By default the uri to load a resource is /module/controller/show/id/1 
-     * showAction uses
+     * By default the uri to show a resource is /module/controller/show/id/1 
+     *
+     * @param int $id The id of resource to load
      */
     public function showAction($id)
     {
@@ -46,56 +49,66 @@ abstract class RestfullController extends ApplicationController
         if (null === $resource) {
             return $this->forwardTo404();
         } else {
-            $this->getView()->assign('resource',$resource);
+            $this->getView()->assign('resource', $resource);
         }
     }
 
     public function newAction()
     {
-        $model = $this->_get_model_name();
+        $model = $this->get_model_name();
         $resource = new $model();
-        $this->getView()->assign('resource',$resource);
+        $this->get_index_url();
+        $this->getView()->assign('resource', $resource);
     }
 
     public function createAction()
     {
-        $model = $this->_get_model_name();
+        $model = $this->get_model_name();
 
-        $resource = new $model($this->_get_resource_params($model));
+        $resource = new $model($this->get_resource_params($model));
 
         if ($resource->save()) {
-            $this->redirect($this->_get_index_url());
+            $this->redirect($this->get_index_url());
+            return false;
         } else {
-            $this->render('new', array('resource'=>$resource));
+            Yaf\Dispatcher::getInstance()->disableView();
+            echo $this->render('new', array('resource'=>$resource, 
+                'index_url'=>$this->get_index_url()));
+            return false;
         }
     }
 
-    public function editAction()
+    public function editAction($id)
     {
 
-        $resource = $this->getResource();
+        $resource = $this->getResource($id);
         
         if (null === $resource) {
             return $this->forwardTo404();
         } else {
-            $this->getView()->assign('resource',$resource);
+            $this->get_index_url();
+            $this->getView()->assign('resource', $resource);
         }
     }
 
-    public function updateAction()
+    public function updateAction($id)
     {
-        $resource = $this->getResource();
+        $resource = $this->getResource($id);
         
         if (null === $resource) {
             return $this->forwardTo404();
         } 
         
-        $model = $this->_get_model_name();
+        $model = $this->get_model_name();
 
-        if ($resource->updateAttributes($this->_get_resource_params($model))) {
-            $this->redirect($this->_get_index_url());
+        if ($resource->updateAttributes($this->get_resource_params($model))) {
+            $this->redirect($this->get_index_url());
+            return false;
         } else {
-            $this->render('edit', array('resource'=>$resource));
+            Yaf\Dispatcher::getInstance()->disableView();
+            echo $this->render('edit', array('resource'=>$resource, 
+                'index_url'=>$this->get_index_url()));
+            return false;
         }
     }
 
@@ -109,7 +122,8 @@ abstract class RestfullController extends ApplicationController
 
         $this->resource->destroy();
 
-        $this->redirect($this->_get_index_url());
+        $this->redirect($this->get_index_url());
+        return false;
     }
 
     /**
@@ -124,30 +138,39 @@ abstract class RestfullController extends ApplicationController
      */
     public function getResourceCollection()
     {
-        $model = $this->_get_model_name();
+        $model = $this->get_model_name();
 
         return $model::find()->fetchAll();
     }
 
+    /**
+     * Creates a resource by a given id.
+     *
+     * By default it finds the resource for the given id.
+     * Overload this method if you want to load a resource with additional 
+     * criteria.
+     *
+     * @param int $id The id of resource to load.
+     */
     public function getResource($id)
     {
         if (null === $this->_resource) {
-            $model = $this->_get_model_name();
+            $model = $this->get_model_name();
             $this->_resource = $model::findById($id)
                 ->fetch();
         }
         return $this->_resource;
     }
 
-    private function _get_model_name()
+    protected function get_model_name()
     {
         return Inflect::singularize($this->getRequest()->getControllerName())
             . "Model";       
     }
 
-    private function _get_resource_params($model)
+    protected function get_resource_params($model)
     {
-        $param_name = Inflect::underscore(str_replace('Model','',$model));
+        $param_name = Inflect::underscore(str_replace('Model', '', $model));
         $post = $this->getRequest()->getPost();
 
         return $post[$param_name];
@@ -155,10 +178,19 @@ abstract class RestfullController extends ApplicationController
 
     protected function get_index_url()
     {
+
+        if (null !== $this->_index_url) {
+            return $this->_index_url;
+        }
+
         $module = $this->getRequest()->getModuleName();
-        return "/"
+        
+        $this->_index_url = "/"
             . ('index' == strtolower($module) ? null : $module. "/")
             . Inflect::underscore($this->getRequest()->getControllerName()) 
-            . "/index";       
+            . "/index";
+        
+        $this->getView()->assign('index_url', $this->_index_url);
+        return $this->_index_url;
     }
 }
