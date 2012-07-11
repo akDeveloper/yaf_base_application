@@ -149,7 +149,7 @@ abstract class Entity extends \Lycan\Validations\Validate
     {
         #if (empty($this->_to_save)) return true;
         $v = $validate ? $this->isValid() : true;
-        return $v && $this->create_or_update();
+        return $v && $this->_create_or_update();
     }
 
     private function _create_or_update()
