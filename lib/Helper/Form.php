@@ -10,10 +10,20 @@ namespace Helper;
  * @author Andreas Kollaros
  */
 
-require_once dirname(__FILE__) . DS . "Html.php";
-
 class Form
 {
+    public static function label($tag, $for=null, $attrs=array())
+    {
+        $attrs['for'] = $for;
+        return '<label'.Html::attributes($attrs).'>'.$tag.'</label>'.PHP_EOL;
+    }
+
+    public static function textarea($name, $value=null, $attrs=array())
+    {
+        $attrs['name'] = $name;
+
+        return '<textarea'.Html::attributes($attrs).'>'.Html::encode($value).'</textarea>'.PHP_EOL;
+    }
 
     public static function select($name, $options = array(), $selected = null, 
         $attrs = array(), $add_empty = true
@@ -66,10 +76,10 @@ class Form
     ) {
 
         ((string) $value == (string) $checked_value) 
-            ? $options['checked'] = 'checked'
+            ? $attrs['checked'] = 'checked'
             : null;
 
-        return self::_input_html('checkbox', $name, $value, $attrs); 
+        return self::input_html('checkbox', $name, $value, $attrs); 
     }
 
     public static function radio($name, $value, $checked = false, $attrs = array())
@@ -78,29 +88,30 @@ class Form
             $attrs['checked'] = 'checked';
         }
 
-        return self::_input_html('hidden', $name, $value, $attrs);
+        return self::input_html('hidden', $name, $value, $attrs);
     }
 
     public static function hidden($name, $value = null, $attrs = array())
     {
-
-        return self::_input_html('hidden', $name, $value, $attrs);
+        return self::input_html('hidden', $name, $value, $attrs);
     }
     
     public static function text($name, $value = null, $attrs=array())
     {
-
-        return self::_input_html('text', $name, $value, $attrs);
+        return self::input_html('text', $name, $value, $attrs);
     }
 
-    public static function file($name, $value = null, $options = array())
+    public static function file($name, $value = null, $attrs = array())
     {
-
-        return self::_input_html('file', $name, $value, $attrs);
-
+        return self::input_html('file', $name, $value, $attrs);
     }
 
-    private static function _input_html($type="submit", $name=null, $value=null, 
+    public static function password($name, $value = null, $attrs = array())
+    {
+        return self::input_html('password', $name, $value, $attrs);
+    }
+
+    public static function input_html($type="submit", $name=null, $value=null, 
         $attrs=array()
     ) {
         
