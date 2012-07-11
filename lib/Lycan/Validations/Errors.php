@@ -24,6 +24,11 @@ class Errors extends \ArrayIterator
         return $this->count() == 0; 
     }
 
+    public function contains($attribute)
+    {
+        return $this->offsetExists($attribute);
+    }
+
     public function add($attribute, $message=null, $options=array())
     {
         $message = $this->_normalize_message($attribute, $message, $options);
