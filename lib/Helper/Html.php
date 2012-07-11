@@ -84,6 +84,68 @@ class Html
         return '<link href="' . $url . '" '.self::attributes($attrs).'/>' . PHP_EOL;
     }
 
+    /**
+     * Appends a javascript file from current view.
+     *
+     * Some javascript files are required to load only in specific action 
+     * views. You can add them with this method.
+     *
+     * Notice that you have to add a line to your layout file like:
+     * <code>
+     * <?= $this->javascripts ?>
+     * </code>
+     * This is the place where additional javascript files would appear.
+     * 
+     * @param \Yaf\View_Interface $view The view instance
+     * @param string|array        $args An array of javascript paths or a 
+     *                                  string with javascript path to load.
+     */
+    public static function appendJavascript(\Yaf\View_Interface $view, $args)
+    {
+        if ( !isset($view->javascripts)) {
+            $view->assign('javascripts', '');
+        }
+        
+        if ( !is_array($args)) {
+            $args = array($args);
+        }
+        
+        foreach ($args as $arg) {
+            $view->javascripts .= self::javascript($arg);
+        }
+    }
+
+    /**
+     * Appends a stylesheet file from current view.
+     *
+     * Some stylesheet files are required to load only in specific action 
+     * views. You can add them with this method.
+     *
+     * Notice that you have to add a line to your layout file like:
+     * <code>
+     * <?= $this->css ?>
+     * </code>
+     * This is the place where additional stylesheet files would appear.
+     * 
+     * @param \Yaf\View_Interface $view The view instance
+     * @param string|array        $args An array of stylesheet paths or a 
+     *                                  string with stylesheet path to load.
+     */
+    public static function appendCss(\Yaf\View_Interface $view, $args)
+    {
+        if ( !isset($view->css)) {
+            $view->assign('css', '');
+        }
+
+        if ( !is_array($args)) {
+            $args = array($args);
+        }
+
+        foreach ($args as $arg) {
+            $view->css .= self::css($arg);
+        } 
+    }
+
     public static function attributes($array)
     {
         if (empty($array)) return null;
