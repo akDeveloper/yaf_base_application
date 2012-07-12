@@ -21,10 +21,10 @@
 class AuthTokenPlugin extends Yaf\Plugin_Abstract
 {
 
-    public function routerStartup(Yaf\Request_Abstract $request , 
+    public function routerShutdown(Yaf\Request_Abstract $request , 
         Yaf\Response_Abstract $response
     ) {
-
+        $this->auth_token();
     }
 
     public function dispatchLoopStartup(Yaf\Request_Abstract $request, 
@@ -36,7 +36,7 @@ class AuthTokenPlugin extends Yaf\Plugin_Abstract
 
     protected function verify_auth_token($request)
     {
-        $config = Yaf\Registry::get("config");
+        $config = Yaf\Application::app()->getConfig();
         
         if (   $config['application']['protect_from_csrf']
             && $request->isPost())
@@ -49,7 +49,12 @@ class AuthTokenPlugin extends Yaf\Plugin_Abstract
             }
         }
     }
-
+    
+    /**
+     * Creates a random token, ancodes it with Base64 and stores it to session
+     *
+     * @return string The authenticity token string.
+     */
     protected function auth_token()
     {
         $session = Yaf\Session::getInstance();
