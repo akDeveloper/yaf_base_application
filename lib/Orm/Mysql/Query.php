@@ -40,6 +40,11 @@ class Query
         'VARIANCE',
     );
 
+    /**
+     * The model class name
+     *
+     * @var string
+     */
     protected $model;
 
     protected $select;
@@ -70,6 +75,13 @@ class Query
 
     protected $adapter;
 
+    /**
+     * Creates a Query object to perform Mysql queries.
+     *
+     * @param string            $model The model class name tthat called this Query 
+     *                          object.
+     * @param Orm\Mysql\Adapter The adapter instance with a database connection.
+     */
     public function __construct($model=null, $adapter=null)
     {
         $this->model = $model;
