@@ -37,6 +37,8 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract
 
     public function _initRoute(Yaf\Dispatcher $dispatcher)
     {
+        $config = new Yaf\Config\Ini(APP_PATH . '/config/routing.ini');
+        $dispatcher->getRouter()->addConfig($config);
     }
 
     /**
