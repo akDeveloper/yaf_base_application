@@ -4,18 +4,6 @@ class ErrorController extends \Yaf\Controller_Abstract {
     
     public function errorAction($exception) {
         
-        switch ($exception->getCode()) {
-            case YAF\ERR\AUTOLOAD_FAILED:
-            case YAF\ERR\NOTFOUND\MODULE:
-            case YAF\ERR\NOTFOUND\CONTROLLER:
-            case YAF\ERR\NOTFOUND\ACTION:
-                header('HTTP/1.0 404 Not Found');
-                break;
-            default:
-                header("HTTP/1.0 500 Internal Server Error");
-                break;
-        }
-        
         $this->getView()->setLayout(null);
 
         // fallback views path to global when error occured in modules.
@@ -36,6 +24,26 @@ class ErrorController extends \Yaf\Controller_Abstract {
             $this->getRequest()->getQuery()
         );
 
-        Logger::getLogger()->logException($exception);
+        eYaf\Logger::getLogger()->logException($exception);
+
+        switch ($exception->getCode()) {
+            case YAF\ERR\AUTOLOAD_FAILED:
+            case YAF\ERR\NOTFOUND\MODULE:
+            case YAF\ERR\NOTFOUND\CONTROLLER:
+            case YAF\ERR\NOTFOUND\ACTION:
+                header('HTTP/1.1 404 Not Found');
+                break;
+            case 401:
+                $this->forward('Index','application','accessDenied');
+                header('HTTP/1.1 401 Unauthorized');
+                Yaf\Dispatcher::getInstance()->disableView(); 
+                echo $this->render('accessdenied');
+                break; 
+            default:
+                header("HTTP/1.1 500 Internal Server Error");
+                break;
+        }
+        
+        eYaf\Logger::stopLogging();
     }
 }

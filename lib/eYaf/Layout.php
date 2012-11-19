@@ -2,6 +2,9 @@
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
+namespace eYaf;
+
+
 /**
  * Layout class used for render layouts and views.
  *
@@ -39,7 +42,7 @@
  * @author Andreas Kollaros <mail@dot.com>
  *
  */
-class Layout implements Yaf\View_Interface
+class Layout implements \Yaf\View_Interface
 {
 
     /**
@@ -112,7 +115,7 @@ class Layout implements Yaf\View_Interface
      */
     protected function engine()
     {
-        $this->engine =  $this->engine ?: new Yaf\View\Simple(
+        $this->engine =  $this->engine ?: new \Yaf\View\Simple(
             $this->tpl_dir, 
             $this->options
         );
@@ -143,7 +146,7 @@ class Layout implements Yaf\View_Interface
             return true;
         }
 
-        throw new Exception("Invalid path: {$path}");
+        throw new \Exception("Invalid path: {$path}");
     }
 
     /**
@@ -191,7 +194,7 @@ class Layout implements Yaf\View_Interface
      */
     public function getLayoutPath()
     {
-        $config = Yaf\Application::app()->getConfig()->get('application');
+        $config = \Yaf\Application::app()->getConfig()->get('application');
         return $this->layout_path . "/" . $this->layout . ".{$config->view->ext}";
     }
 
@@ -310,7 +313,7 @@ class Layout implements Yaf\View_Interface
         // Hack??
         // Get template vars from view via Reflection class and assign them to 
         // layout view
-        $ref = new ReflectionClass($this->engine());
+        $ref = new \ReflectionClass($this->engine());
         $prop = $ref->getProperty('_tpl_vars');
         $prop->setAccessible(true);
         $view_vars = $prop->getValue($this->engine());

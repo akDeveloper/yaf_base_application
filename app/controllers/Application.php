@@ -33,7 +33,7 @@ class ApplicationController extends Yaf\Controller_Abstract
      * 
      * @var Yaf\Config\Ini
      */
-    private $_config;
+    private $config;
 
     /**
      * Initialize layout and session.
@@ -55,10 +55,10 @@ class ApplicationController extends Yaf\Controller_Abstract
         $this->getView()->session = $this->session;
 
         // Assign application config file to this controller
-        $this->_config = Yaf\Application::app()->getConfig();
+        $this->config = Yaf\Application::app()->getConfig();
 
         // Assign config file to views
-        $this->getView()->config = $this->_config;
+        $this->getView()->config = $this->config;
     }
 
     /**
@@ -78,7 +78,7 @@ class ApplicationController extends Yaf\Controller_Abstract
 
     public function getConfig()
     {
-        return $this->_config;
+        return $this->config;
     }
 
     /**

@@ -1,5 +1,9 @@
 <?php
 
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
+namespace eYaf;
+
 /**
  * Filter user input data.
  * 
@@ -8,7 +12,7 @@
  * 
  * @return array the user data filtered,
  */ 
-class Request extends Yaf\Request\Http
+class Request extends \Yaf\Request\Http
 {
     private $_posts;
     private $_params;
@@ -50,7 +54,7 @@ class Request extends Yaf\Request\Http
     {
         if (!empty($params)) {
             array_walk_recursive($params, function(&$value, $key){
-                $value=htmlspecialchars($value,ENT_QUOTES,'UTF-8');
+                $value=htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
             });
         }
 

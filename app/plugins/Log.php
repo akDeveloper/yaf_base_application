@@ -2,6 +2,8 @@
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
+use eYaf\Logger;
+
 class LogPlugin extends Yaf\Plugin_Abstract
 {
 

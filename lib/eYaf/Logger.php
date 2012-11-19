@@ -2,9 +2,11 @@
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
+namespace eYaf;
+
 define('DS',DIRECTORY_SEPARATOR);
 
-class Logger extends SplFileObject
+class Logger extends \SplFileObject
 {
     const RED    = '1;31m';
     const GREEN  = '1;32m';
@@ -47,7 +49,7 @@ class Logger extends SplFileObject
     public static function getLogger($env=null, $open_mode="a")
     {
         if (static::$logger_instance) return static::$logger_instance; 
-        $env = $env ?: Yaf\ENVIRON;
+        $env = $env ?: \Yaf\ENVIRON;
         $filename = APP_PATH . '/log' . DS . $env . '.log';
         static::$logger_instance = new static($filename,$open_mode);
         return static::$logger_instance; 
@@ -55,7 +57,7 @@ class Logger extends SplFileObject
 
     public function __construct($filename=null, $open_mode = "a")
     {
-        $filename = $filename ?: APP_PATH . "/log" . DS . Yaf\ENVIRON . ".log";
+        $filename = $filename ?: APP_PATH . "/log" . DS . \Yaf\ENVIRON . ".log";
         parent::__construct($filename, $open_mode);
     }
 
@@ -66,7 +68,7 @@ class Logger extends SplFileObject
 
     public function errorLog($string)
     {
-        $this->log(COLOR_SEQ . "1;37m" . "!! WARNING: " . $string . RESET_SEQ);
+        $this->log(self::COLOR_SEQ . "1;37m" . "!! WARNING: " . $string . self::RESET_SEQ);
     }
 
     public function logQuery($query, $class_name=null, $parse_time = 0, $action='Load')

@@ -1,5 +1,10 @@
 <?php 
 
+/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
+
+use eYaf\Request;
+use eYaf\Layout;
+
 class Bootstrap extends \Yaf\Bootstrap_Abstract 
 {
 
