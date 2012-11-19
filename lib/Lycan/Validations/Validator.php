@@ -17,9 +17,10 @@ abstract class Validator
     public function kind()
     {
         if (null == $this->kind) {
-            $name = get_class($this);
-            $this->kind = ':' . array_pop(explode('\\',$name));
+            $name = explode('\\',get_class($this));
+            $this->kind = strtolower(array_pop($name));
         }
+
         return $this->kind;
     }
 

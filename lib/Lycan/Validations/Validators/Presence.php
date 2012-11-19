@@ -4,18 +4,18 @@
 
 namespace Lycan\Validations\Validators;
 
-class Presence extends \Lycan\Validations\Validators\Each
+class Presence extends Each
 {
-    public function validate($record)
-    {
-        $if = $this->validates_if($record);
-        if (false == $if) return true;
-
-        $record->errors()->addOnEmpty($this->attributes, $this->options);
-    }
-
     protected function validateEach($record, $attribute, $value)
     {
+        $value = $record->readAttributeForValidation($attribute);
+
+        $is_empty = is_object($value) && method_exists($value, 'isEmpty') 
+            ? $value->isEmpty() 
+            : empty($value);
         
+        if ($is_empty) {
+            $record->errors()->add($attribute, ':not_empty', $this->options);
+        }
     }
 }

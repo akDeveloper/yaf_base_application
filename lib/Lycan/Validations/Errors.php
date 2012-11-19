@@ -6,17 +6,16 @@ namespace Lycan\Validations;
 
 class Errors extends \ArrayIterator
 {
-    protected $base;
-
-    public function __construct($base, $array=array(), $flags=0)
+    public function __construct($array=array(), $flags=0)
     {
-        $this->base = $base;
         parent::__construct($array, $flags);
     }
 
     public function clear()
     {
-        foreach ($this as $v) unset($v);
+        $array = $this->getArrayCopy();
+
+        foreach ($array as $k=>$v) $this->offsetUnset($k);
     }
 
     public function isEmpty()
@@ -38,24 +37,6 @@ class Errors extends \ArrayIterator
         $this->offsetSet($attribute, $val);
     }
 
-    public function addOnEmpty($attributes, $options=array())
-    {
-        foreach ($attributes as $attribute) {
-            $value = $this->base->$attribute;
-            $is_empty = is_object($value) && method_exists($value, 'isEmpty') ? $value->isEmpty() : empty($value);
-            if($is_empty) $this->add($attribute, ':empty', $options);
-        }
-    }
-
-    public function addOnNull($attributes, $options=array())
-    {
-        foreach ($attributes as $attribute) {
-            $value = $this->base->$attribute;
-            $is_null = is_object($value) && method_exists($value, 'isNull') ? $value->isNull() : is_null($value);
-            if($is_null) $this->add($attribute, ':null', $options);
-        }
-    }
-
     private function _normalize_message($attribute, $message, $options)
     {
         $message = $message ?: ':invalid';
@@ -71,11 +52,12 @@ class Errors extends \ArrayIterator
 
     public function generateMessage($attribute, $type=':invalid', $options=array())
     {
-        // TODO: i18n
-        $message = null; 
+        $message = null;
+        $type = substr($type, 1);
+
         if (isset($options['message'])) {
             if (0 === strpos($options['message'], ':'))
-                $type = $options['message'];
+                $type = substr($options['message'], 1);
             else
                 $message = $options['message'];
         }

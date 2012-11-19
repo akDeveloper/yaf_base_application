@@ -24,21 +24,28 @@ namespace Lycan\Validations\Validators;
  *                  this Closure object.
  *
  * <code>
- * $options = array('Acceptance' => true); 
- * $this->validates('terms_of_service', $options);
+ *      $options = array('Acceptance' => true); 
+ *      $this->validates('terms_of_service', $options);
  *
- * $options = array('Acceptance' => array(
+ *      $options = array('Acceptance' => array(
  *             'message'=> 'accept the terms or else ...',
  *             'if' => function($class){
  *                  return !$class->isNeedToAccept;
  *             }
- *         ));
- * $this->validates('terms_of_service',$options);
+ *      ));
+ *
+ *      $this->validates('terms_of_service',$options);
  * </code>
  *
+ * @vendor  Lycan
+ * @package Validations
+ * @author  Andreas Kollaros <php@andreaskollaros.com> 
+ * @license MIT {@link http://opensource.org/licenses/mit-license.php}
  */
-class Acceptance extends \Lycan\Validations\Validators\Each
+class Acceptance extends Each
 {
+    protected $message = 'must be accepted';
+
     public function __construct($options)
     {
         $options = array_merge($options, array('allow_null'=>true));
@@ -53,7 +60,7 @@ class Acceptance extends \Lycan\Validations\Validators\Each
         if ($value != $this->options['accept']) {
             unset($this->options['allow_null']);
             unset($this->options['accept']);
-            $record->errors()->add($attribute, ':accepted', $this->options);
+            $record->errors()->add($attribute, $this->message, $this->options);
         }
     }
 }

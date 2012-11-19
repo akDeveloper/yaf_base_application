@@ -8,8 +8,8 @@ class Inclusion extends \Lycan\Validations\Validators\Clusivity
 {
     public function validateEach($record, $attribute, $value)
     {
-        if (!$this->is_include($record,$value)) {
-            $record->errors()->add($attribute, ':inclusion',$this->filtered_options($value));
+        if (!$this->is_include($record, $value)) {
+            $record->errors()->add($attribute, ':inclusion', $this->filtered_options($value));
         }
     }
 }

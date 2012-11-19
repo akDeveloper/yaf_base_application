@@ -11,8 +11,10 @@ namespace Lycan\Validations;
  * you want to pass the class. 
  *
  * <code>
- * class MyClass extends \Lycan\Validations\Validate
+ * class MyClass
  * {
+ *      use Lycan\Validations\Validate;
+ *
  *      protected function validations()
  *      {
  *          $this->validates('property', array('Validator'=>$options);
@@ -21,8 +23,10 @@ namespace Lycan\Validations;
  * }
  * </code>
  */
-abstract class Validate
+trait Validate
 {
+    protected $default_keys = array('if', 'on', 'allow_empty', 'allow_null');
+
     private $_errors;
 
     /**
@@ -34,8 +38,13 @@ abstract class Validate
      */ 
     public function errors()
     {
-        $this->_errors = $this->_errors ?: new Errors($this);
+        $this->_errors = $this->_errors ?: new Errors();
         return $this->_errors;
+    }
+
+    public function getErrors()
+    {
+        return $this->errors();
     }
 
     /**
@@ -46,7 +55,7 @@ abstract class Validate
     public function isValid()
     {
         $this->errors()->clear();
-        $this->validations();
+        $this->run_validations();
         return $this->errors()->isEmpty(); 
     }
 
@@ -87,9 +96,12 @@ abstract class Validate
     final public function validates($attrs, array $validations)
     {
         foreach ($validations as $key=>$options) {
+
             $validator = "\\Lycan\\Validations\\Validators\\" . $key;
-            if (!class_exists($validator))
+            
+            if (!class_exists($validator)) {
                 throw new \Exception("Unknown validator: {$key}");
+            }
 
             $defaults = $this->_parse_validates_options($options);
             $defaults['attributes'] = $attrs;
@@ -103,18 +115,29 @@ abstract class Validate
         return isset($this->$attribute) ? $this->$attribute : null;
     }
 
-    abstract protected function validations();
-    
+    protected function validations()
+    {
+        return true;
+    }
+
+    protected function run_validations()
+    {
+        $this->validations();
+
+        return $this->errors()->count() == 0;
+    }
+
     private function _parse_validates_options($options)
     {
         if (is_array($options)) {
+
             return $options;
         } elseif(is_bool($options)) {
+
             return array();
         } else {
+
             return array('with' => $options);
         }
-
     }
-
 } 

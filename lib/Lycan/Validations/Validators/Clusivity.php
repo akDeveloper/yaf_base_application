@@ -4,7 +4,7 @@
 
 namespace Lycan\Validations\Validators;
 
-abstract class Clusivity extends \Lycan\Validations\Validators\Each
+abstract class Clusivity extends Each
 {
     protected function is_include($record, $value)
     {
