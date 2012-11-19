@@ -20,8 +20,7 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract
 
     public function _initDatabase(Yaf\Dispatcher $dispatcher)
     {
-        $adapter = new Orm\Mysql\Adapter($this->config->database->mysql);
-        Orm\Entity::setAdapter($adapter); 
+
     }
 
     public function _initPlugins(Yaf\Dispatcher $dispatcher)
