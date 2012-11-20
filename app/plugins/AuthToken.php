@@ -12,7 +12,7 @@
  *
  * Then you must define an input hidden field in each html form you submit.
  * <code>
- * <input type="hidden" name="auth_token" value="<?php echo Yaf\Session::getInstance()->auth_token ?>">
+ * <input type="hidden" name="_auth_token" value="<?php echo Yaf\Session::getInstance()->auth_token ?>">
  * </code>
  *
  * After submission of the form, the plugin will attempt to validate the 
@@ -42,8 +42,8 @@ class AuthTokenPlugin extends Yaf\Plugin_Abstract
             && $request->isPost())
         {
             $post = $request->getPost();
-            if (   !isset($post['auth_token']) 
-                || $post['auth_token'] !== $this->auth_token()
+            if (   !isset($post['_auth_token']) 
+                || $post['_auth_token'] !== $this->auth_token()
             ){
                 throw new \Exception('Invalid authenticity token!');
             }
