@@ -11,8 +11,8 @@ namespace eYaf;
  * Layout class allows to use of a base layout skeleton and render views inside 
  * this layout template.
  * The concept is to not render and display the view template directly but storing it
- * in {@link $yield} property. Then will render the skeleton layout and 
- * pass the {@link $yield} property to it.
+ * in {@link $content} property. Then will render the skeleton layout and 
+ * pass the {@link $content} property to it.
  * <code>
  *  application/views/layouts/front.phtml
  *
@@ -21,7 +21,7 @@ namespace eYaf;
  *          <title><?php echo $title ?></title>
  *      </head>
  *      <body>
- *          <?php echo $this->yield // This is where your view from each action 
+ *          <?= $_content_ // This is where your view from each action 
  *          will be displayed ?>
  *      </body>
  *  </html>
@@ -78,7 +78,7 @@ class Layout implements \Yaf\View_Interface
      *
      * @var string
      */
-    protected $yield;
+    protected $content;
 
     /**
      * Array with assigned template variables.
@@ -287,7 +287,7 @@ class Layout implements \Yaf\View_Interface
      * Processes a view and returns the output.
      *
      * This method called once from controller to render the given view.
-     * So render the view at $this->yield property and then render the 
+     * So render the view at $this->content property and then render the 
      * layout template.
      *
      * @param string $tpl      The template to process.
@@ -299,13 +299,13 @@ class Layout implements \Yaf\View_Interface
 
         $tpl_vars = array_merge($this->tpl_vars, $tpl_vars);
 
-        $this->yield = $this->engine()->render($tpl, $tpl_vars);
+        $this->content = $this->engine()->render($tpl, $tpl_vars);
 
         // if no layout is defined,
         // return the rendered view template
         if (null == $this->layout) {
 
-            return $this->yield;
+            return $this->content;
         }
 
         // If we assign some variables into view template, then maybe we need 
@@ -319,7 +319,7 @@ class Layout implements \Yaf\View_Interface
         $view_vars = $prop->getValue($this->engine());
 
         $tpl_vars = array_merge($tpl_vars, $view_vars);
-        $tpl_vars['yield'] = $this->yield;
+        $tpl_vars['_content_'] = $this->content;
 
         return $this->engine()->render(
             $this->getLayoutPath(), 
