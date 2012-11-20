@@ -73,7 +73,7 @@ class ApplicationController extends Yaf\Controller_Abstract
     public function __set($name, $value)
     {
         $this->$name = $value;
-        $this->getView()->assign($name, $value);
+        $this->getView()->assignRef($name, $value);
     }
 
     public function getConfig()
