@@ -21,12 +21,12 @@ Yaf framework documentation can be found at [php.net](http://www.php.net/manual/
  
 ## Additions
 
-* A simple ORM database layer `lib/Orm`. Yaf Models extend `lib/Orm/Entity` class. (More documentation soon at wiki)
-* Validation library `lib/Validations` from [another project](https://github.com/akDeveloper/Lycan) of mine for validating `Orm/Entity` objects.
+* ~~A simple ORM database layer `lib/Orm`. Yaf Models extend `lib/Orm/Entity` class. (More documentation soon at wiki)~~
+* Validation library `lib/Validations` from [another project](https://github.com/akDeveloper/Lycan) of mine for validating classes.
 * A Layout class that allows to render views inside a base html layout `lib/Layout.php`. Layouts directory can be defined in application.ini
 * A Logger class `lib/Logger.php` and a `LoggerPlugin` to log info about requests and database queries. (Make sure that log directory is readable.)
 * A custom Request class `lib/Request.php` that extends `Yaf\Request\Http` and offers input filter for request params, posts and queries.
-* A Paginator `lib/Paginator` forked from Laravel framework and adjust it to work with `lib/Orm`
+* ~~A Paginator `lib/Paginator` forked from Laravel framework and adjust it to work with `lib/Orm`~~
 * An Authenticity token plugin `AuthTokenPlugin`to prevent Cross-site request forgery (csrf). Can be turned on/off from application.ini
 * A base `ApplicationController` which adds some base functionality like 404 not found page.
 * A `RestfullController` to make easy crud (create, read, update, delete) actions.
