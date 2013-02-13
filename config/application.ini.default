@@ -3,7 +3,7 @@
 application.directory=APP_PATH "/app"
 application.ext="php"
 application.view.ext="phtml"
-application.modules="Index"
+application.modules="Index,Admin"
 application.library=APP_PATH "/lib"
 application.library.directory=APP_PATH "/lib"
 application.library.namespace=""	
