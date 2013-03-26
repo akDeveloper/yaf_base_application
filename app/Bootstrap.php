@@ -1,11 +1,11 @@
-<?php 
+<?php
 
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 use eYaf\Request;
 use eYaf\Layout;
 
-class Bootstrap extends \Yaf\Bootstrap_Abstract 
+class Bootstrap extends \Yaf\Bootstrap_Abstract
 {
 
     public function _initErrorHandler(Yaf\Dispatcher $dispatcher)
@@ -17,7 +17,7 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract
     {
         $this->config = Yaf\Application::app()->getConfig();
     }
-    
+
     public function _initRequest(Yaf\Dispatcher $dispatcher)
     {
         $dispatcher->setRequest(new Request());
@@ -31,11 +31,13 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract
     public function _initPlugins(Yaf\Dispatcher $dispatcher)
     {
         $dispatcher->registerPlugin(new LogPlugin());
-        
-        $dispatcher->registerPlugin(new AuthTokenPlugin());
+
+        $this->config->application->protect_from_csrf &&
+            $dispatcher->registerPlugin(new AuthTokenPlugin());
+
     }
 
-    public function _initLoader(Yaf\Dispatcher $dispatcher) 
+    public function _initLoader(Yaf\Dispatcher $dispatcher)
     {
     }
 
@@ -58,16 +60,16 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract
         foreach ($modules as $module) {
             if ('index' == strtolower($module)) continue;
 
-            require_once $app->getAppDirectory() . "/modules" . "/$module" . "/_init.php"; 
-        } 
-    } 
+            require_once $app->getAppDirectory() . "/modules" . "/$module" . "/_init.php";
+        }
+    }
 
     public function _initLayout(Yaf\Dispatcher $dispatcher)
     {
         $layout = new Layout($this->config->application->layout->directory);
         $dispatcher->setView($layout);
     }
-    
+
     /**
      * Custom error handler.
      *
