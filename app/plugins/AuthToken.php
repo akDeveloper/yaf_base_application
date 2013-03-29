@@ -38,8 +38,12 @@ class AuthTokenPlugin extends Yaf\Plugin_Abstract
     {
         $config = Yaf\Application::app()->getConfig();
 
-        if ( $post = $request->getPost())
-        {
+        if (   $config['application']['protect_from_csrf']
+            && $request->isPost()
+        ) {
+            
+            $post = $request->getPost();
+
             if (   !isset($post['_auth_token'])
                 || $post['_auth_token'] !== $this->auth_token()
             ){

@@ -85,6 +85,19 @@ class Bootstrap extends \Yaf\Bootstrap_Abstract
      */
     public static function error_handler($errno, $errstr, $errfile, $errline)
     {
+        // Do not throw exception if error was prepended by @
+        //
+        // See {@link http://www.php.net/set_error_handler}
+        //
+        // error_reporting() settings will have no effect and your error handler 
+        // will be called regardless - however you are still able to read 
+        // the current value of error_reporting and act appropriately. 
+        // Of particular note is that this value will be 0 
+        // if the statement that caused the error was prepended 
+        // by the @ error-control operator.
+        //
+        if (error_reporting() === 0) return;
+
         throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
     }
 }
